@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const uuid = require('uuid/v4');
+const methodOverride = require('method-override');
 const PORT = process.env.PORT || 8080;
 
 const DOGS_DB = {
@@ -22,6 +23,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
 
 app.get('/', (req, res) => {
   res.redirect('/dogs');
@@ -69,7 +71,34 @@ app.get('/dogs/:uuid', (req, res) => {
   res.render('dogs/show', templateVars);
 });
 
+// EDIT
 
+app.get('/dogs/:uuid/edit', (req, res) => {
+  const { uuid } = req.params;
+  const dog = DOGS_DB[uuid];
+
+  if (!dog) {
+    res.redirect('/dogs/new');
+    return;
+  }
+
+  res.render('dogs/edit', { dog });
+});
+
+app.put('/dogs/:uuid', (req, res) => {
+  const { uuid } = req.params;
+  const dog = DOGS_DB[uuid];
+
+  if (!dog) {
+    res.status(422).send(`Cannot find dog with id: ${uuid}`);
+    return;
+  }
+
+  const { name } = req.body;
+  dog.name = name;
+
+  res.redirect(`/dogs/${uuid}`);
+});
 
 app.listen(PORT, () => {
   console.log(`App is listening on http://localhost:${PORT}`);
