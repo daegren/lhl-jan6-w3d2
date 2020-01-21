@@ -13,9 +13,19 @@
 
   <h2><%= dog.name %></h2>
 
-  <a href="/dogs/<%= dog.id %>/edit">Edit this dog</a>
+  <div>
+    <a href="/dogs/<%= dog.id %>/edit">Edit this dog</a>
+  </div>
 
-  <a href="/dogs">Back to all dogs</a>
+  <div>
+    <form method="POST" action="/dogs/<%= dog.id %>?_method=DELETE">
+      <input type="submit" value="Delete Dog">
+    </form>
+  </div>
+
+  <div>
+    <a href="/dogs">Back to all dogs</a>
+  </div>
 </body>
 
 </html>

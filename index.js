@@ -45,7 +45,6 @@ app.post('/dogs', (req, res) => {
 
   const id = uuid();
   DOGS_DB[id] = { id, name };
-  console.log(DOGS_DB[id]);
 
   res.redirect(`/dogs/${id}`);
 });
@@ -98,6 +97,21 @@ app.put('/dogs/:uuid', (req, res) => {
   dog.name = name;
 
   res.redirect(`/dogs/${uuid}`);
+});
+
+// DELETE
+
+app.delete('/dogs/:uuid', (req, res) => {
+  const { uuid } = req.params;
+  const dog = DOGS_DB[uuid];
+
+  if (!dog) {
+    res.status(422).send(`Cannot find dog with id: ${uuid}`);
+    return;
+  }
+
+  delete DOGS_DB[uuid];
+  res.redirect('/dogs');
 });
 
 app.listen(PORT, () => {
