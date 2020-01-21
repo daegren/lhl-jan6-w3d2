@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const uuid = require('uuid/v4');
 const PORT = process.env.PORT || 8080;
 
 const DOGS_DB = {
@@ -19,9 +21,34 @@ const DOGS_DB = {
 const app = express();
 app.set('view engine', 'ejs');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.get('/', (req, res) => {
   res.redirect('/dogs');
 });
+
+// CREATE
+
+app.get('/dogs/new', (req, res) => {
+  res.render('dogs/new');
+});
+
+app.post('/dogs', (req, res) => {
+  const { name } = req.body;
+
+  if (!name) {
+    res.status(422).send('Please include a name for the dog to create');
+    return;
+  }
+
+  const id = uuid();
+  DOGS_DB[id] = { id, name };
+  console.log(DOGS_DB[id]);
+
+  res.redirect(`/dogs/${id}`);
+});
+
+// READ
 
 app.get('/dogs', (req, res) => {
   const dogs = Object.values(DOGS_DB);
@@ -41,6 +68,8 @@ app.get('/dogs/:uuid', (req, res) => {
   const templateVars = { dog };
   res.render('dogs/show', templateVars);
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`App is listening on http://localhost:${PORT}`);

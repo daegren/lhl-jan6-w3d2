@@ -9,19 +9,16 @@
 </head>
 
 <body>
-  <h1>Dogs</h1>
+  <h1>Create a new Dog</h1>
 
-  <a href="/dogs/new">Create a dog</a>
+  <form method="POST" action="/dogs">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" name="name" id="name">
+    </div>
 
-  <ul>
-    <% dogs.forEach(dog => { %>
-    <li>
-      <a href="/dogs/<%= dog.id  %>">
-        <%= dog.name %>
-      </a>
-    </li>
-    <% }) %>
-  </ul>
+    <input type="submit" value="Create Dog">
+  </form>
 </body>
 
 </html>
