@@ -26,8 +26,20 @@ app.get('/', (req, res) => {
 app.get('/dogs', (req, res) => {
   const dogs = Object.values(DOGS_DB);
   const templateVars = { dogs };
-  console.log(templateVars);
   res.render('dogs/index', templateVars);
+});
+
+app.get('/dogs/:uuid', (req, res) => {
+  const { uuid } = req.params;
+  const dog = DOGS_DB[uuid];
+
+  if (!dog) {
+    res.status(404).send(`Cannot find dog with id: ${uuid}`);
+    return;
+  }
+
+  const templateVars = { dog };
+  res.render('dogs/show', templateVars);
 });
 
 app.listen(PORT, () => {

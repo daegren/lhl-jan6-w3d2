@@ -11,15 +11,9 @@
 <body>
   <h1>Dogs</h1>
 
-  <ul>
-    <% dogs.forEach(dog => { %>
-    <li>
-      <a href="/dogs/<%= dog.id  %>">
-        <%= dog.name %>
-      </a>
-    </li>
-    <% }) %>
-  </ul>
+  <h2><%= dog.name %></h2>
+
+  <a href="/dogs">Back to all dogs</a>
 </body>
 
 </html>
